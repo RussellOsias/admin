@@ -34,9 +34,9 @@ if (isset($_POST['login'])) {
         $_SESSION['lname'] = $row['Lastname'];
         $_SESSION['email'] = $row['email'];
         $_SESSION['verification_code'] = $verification_code; // Store verification code in session
-       
+
         $_SESSION['alert_type'] = "success";
-      
+
         // Send email with verification code
         $mail = new PHPMailer(true);
         $mail->isSMTP();
@@ -80,6 +80,20 @@ if (isset($_POST['login'])) {
             justify-content: space-between; /* Align buttons horizontally */
             align-items: center; /* Align buttons vertically */
         }
+        .message-container {
+            text-align: center;
+            color: #fff;
+            background-color: #007bff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .error {
+            background-color: #dc3545;
+        }
+        .success {
+            background-color: #28a745;
+        }
     </style>
 </head>
 <body>
@@ -87,7 +101,7 @@ if (isset($_POST['login'])) {
     <div class="login-container">
         <h2>Log In</h2>
         <?php if (isset($_SESSION['message']) && !isset($_SESSION['user_id'])): ?>
-            
+            <div class="message-container <?php echo $_SESSION['alert_type']; ?>">
                 <?php 
                 echo $_SESSION['message']; 
                 unset($_SESSION['message']); // Clear the session message after displaying

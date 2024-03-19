@@ -63,6 +63,20 @@ if (isset($_POST['verify'])) {
             justify-content: space-between; /* Align buttons horizontally */
             align-items: center; /* Align buttons vertically */
         }
+        .message-container {
+            text-align: center;
+            color: #fff;
+            background-color: #007bff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .error {
+            background-color: #dc3545;
+        }
+        .success {
+            background-color: #28a745;
+        }
     </style>
 </head>
 <body>
@@ -70,7 +84,7 @@ if (isset($_POST['verify'])) {
         <div class="verification-container">
             <h2>Verification</h2>
             <?php if (isset($_SESSION['message'])): ?>
-                <div class="alert alert-<?php echo $_SESSION['alert_type']; ?>">
+                <div class="message-container <?php echo $_SESSION['alert_type']; ?>">
                     <?php 
                     echo $_SESSION['message']; 
                     unset($_SESSION['message']); // Clear the session message after displaying
