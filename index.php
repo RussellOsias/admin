@@ -25,11 +25,13 @@ if (isset($_POST['register'])) { // Check if the registration form is submitted
     $lname = validate($_POST['lname']); // Get and validate last name
     $email = validate($_POST['email']); // Get and validate email
     $pass = validate($_POST['password']); // Get and validate password
-    $status = validate($_POST['status']); // Get and validate status
     $username = validate($_POST['username']); // Get and validate username
-    $Active = validate($_POST['Active']); // Get and validate Active
 
-    if (empty($fname) || empty($lname) || empty($email) || empty($pass) || empty($status) || empty($username) || empty($Active)) { // Check if any required field is empty
+    // Default status and active values
+    $status = 'Not Verified';
+    $active = 'Not Active';
+
+    if (empty($fname) || empty($lname) || empty($email) || empty($pass) || empty($username)) { // Check if any required field is empty
         $_SESSION['message'] = "All fields are required"; // Set error message
         $_SESSION['alert_type'] = "error"; // Set error alert type
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) { // Check if email is valid
@@ -37,7 +39,7 @@ if (isset($_POST['register'])) { // Check if the registration form is submitted
         $_SESSION['alert_type'] = "error"; // Set error alert type
     } else {
         // Check if email is already registered
-        $email_check_stmt = $conn->prepare("SELECT * FROM user WHERE email=?");
+        $email_check_stmt = $conn->prepare("SELECT * FROM user WHERE Email=?");
         $email_check_stmt->bind_param("s", $email);
         $email_check_stmt->execute();
         $email_check_result = $email_check_stmt->get_result();
@@ -48,7 +50,7 @@ if (isset($_POST['register'])) { // Check if the registration form is submitted
         } else {
             // Insert user data into the database
             $stmt = $conn->prepare("INSERT INTO user (username, password, First_name, Middle_name, Lastname, Email, Status, Active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssssssss", $username, $pass, $fname, $mname, $lname, $email, $status, $Active);
+            $stmt->bind_param("ssssssss", $username, $pass, $fname, $mname, $lname, $email, $status, $active);
             $stmt->execute(); // Execute the prepared statement
             $_SESSION['message'] = "Registration successful"; // Set success message
             $_SESSION['alert_type'] = "success"; // Set success alert type
@@ -109,16 +111,6 @@ if (isset($_POST['register'])) { // Check if the registration form is submitted
                 <input type="email" name="email" class="form-control" placeholder="Email" required><br>
                 <input type="text" name="username" class="form-control" placeholder="Username" required><br>
                 <input type="password" name="password" class="form-control" placeholder="Password" required><br>
-                <input type="text" name="Active" class="form-control" placeholder="Active" required><br>
-                <label>Status</label><br> <!-- Status selection -->
-                
-                <select name="status" class="form-control" required> <!-- Dropdown for selecting status -->
-                    <option value="">Select Status</option>
-                    <option value="single">Single</option>
-                    <option value="married">Married</option>
-                    <option value="widowed">Widowed</option>
-                    <option value="others">Others</option>
-                </select><br>
                 <button type="submit" name="register" class="btn btn-primary">Sign Up</button> <!-- Submit button for registration -->
             </form>
             <div class="btn-container"> <!-- Link to login page -->

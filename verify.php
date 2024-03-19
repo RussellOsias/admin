@@ -19,7 +19,20 @@ if (isset($_POST['verify'])) {
     // Example: Check if the verification code matches a predefined value (replace with your logic)
     $expected_verification_code = $_SESSION['verification_code']; // Retrieve the verification code from session
     if ($verification_code == $expected_verification_code) {
-        // If verification successful, redirect to welcome.php or set appropriate session variables
+        // If verification successful, update status in the database to "verified"
+        $update_status_query = "UPDATE user SET Status='Verified' WHERE user_id=?";
+        $stmt = $conn->prepare($update_status_query);
+        if (!$stmt) {
+            die("Error preparing statement: " . $conn->error);
+        }
+
+        $user_id = $_SESSION['user_id'];
+        $stmt->bind_param("i", $user_id); // Assuming user_id is an integer, adjust the type ("i") accordingly if it's not
+        if (!$stmt->execute()) {
+            die("Error executing statement: " . $stmt->error);
+        }
+
+        // Set success message
         $_SESSION['message'] = "Verification successful";
         $_SESSION['alert_type'] = "success";
         header("Location: welcome.php");

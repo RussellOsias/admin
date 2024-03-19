@@ -1,4 +1,22 @@
-<?php include "authentication.php"; // Include authentication script ?>
+<?php
+include "authentication.php"; // Include authentication script 
+include "db_conn.php";
+
+// Check if the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    // Redirect the user to the login page if not logged in
+    header("Location: login.php");
+    exit(); // Terminate script execution
+}
+
+// Get the user ID from the session
+$user_id = $_SESSION['user_id'];
+
+// Update the active status in the database to "active" for the logged-in user
+$update_active_query = "UPDATE user SET Active='Active' WHERE user_id='$user_id'";
+mysqli_query($conn, $update_active_query);
+
+?>
 
 <!DOCTYPE html>
 <html>

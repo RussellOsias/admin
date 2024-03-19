@@ -34,9 +34,9 @@ if (isset($_POST['login'])) {
         $_SESSION['lname'] = $row['Lastname'];
         $_SESSION['email'] = $row['email'];
         $_SESSION['verification_code'] = $verification_code; // Store verification code in session
-        $_SESSION['message'] = "Verification code sent to your email. Please check your inbox.";
+       
         $_SESSION['alert_type'] = "success";
-
+      
         // Send email with verification code
         $mail = new PHPMailer(true);
         $mail->isSMTP();
